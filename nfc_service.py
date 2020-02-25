@@ -16,11 +16,13 @@ pn532 = PN532_SPI(spi, cs_pin, debug=False)
 
 key = b'\xFF\xFF\xFF\xFF\xFF\xFF'
 
+
 def init_service():
-	ic, ver, rev, support = pn532.get_firmware_version()
-	print('Found PN532 with firmware version: {0}.{1}'.format(ver, rev))
-	# Configure PN532 to communicate with MiFare cards
-	pn532.SAM_configuration()
+    ic, ver, rev, support = pn532.get_firmware_version()
+    print('Found PN532 with firmware version: {0}.{1}'.format(ver, rev))
+    # Configure PN532 to communicate with MiFare cards
+    pn532.SAM_configuration()
+
 
 def authenticate_card():
     print('Waiting for RFID/NFC card!')
@@ -36,10 +38,11 @@ def authenticate_card():
     print('Found card with UID:', [hex(i) for i in uid])
     print("Authenticating block 4 ...")
 
-    authenticated = pn532.mifare_classic_authenticate_block(uid, 4, MIFARE_CMD_AUTH_B, key)
+    authenticated = pn532.mifare_classic_authenticate_block(
+        uid, 4, MIFARE_CMD_AUTH_B, key)
 
     if authenticated:
-        print("Authentication Success!")
+        print('Authentication Success!')
         return True
 
     print("Authentication failed!")
@@ -56,6 +59,7 @@ def get_balance():
         print('failed')
         raise ValueError('Card Authentication Failed')
 
+
 def reload(amount):
     valid = authenticate_card()
     if valid:
@@ -66,6 +70,7 @@ def reload(amount):
     else:
         print('failed')
         raise ValueError('Card Authentication Failed')
+
 
 def pay(amount):
     valid = authenticate_card()
@@ -80,14 +85,14 @@ def pay(amount):
 
 
 if __name__ == '__main__':
-        print ("Main Start - Test")
-        try:
-		init_service()
-		valid = authenticate_card()
-		print(valid)
-
-        # Reset by pressing CTRL + C
-        except KeyboardInterrupt:
-		print("Stopped")
-	finally:
-		GPIO.cleanup()
+    print("Main Start - Test")
+    try:
+        init_service()
+        valid = authenticate_card()
+        print(valid)
+        
+    # Reset by pressing CTRL + C
+    except KeyboardInterrupt:
+        print('Stopped')
+    finally:
+        GPIO.cleanup()
