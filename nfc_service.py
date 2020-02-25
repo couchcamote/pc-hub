@@ -53,7 +53,7 @@ def get_balance():
     valid = authenticate_card()
     if valid:
         print('valid')
-        balance = 100
+        balance = 100.00
         return balance
     else:
         print('failed')
@@ -64,7 +64,7 @@ def reload(amount):
     valid = authenticate_card()
     if valid:
         print('valid')
-        balance = 100
+        balance = 100.00
         balance = balance + amount
         return balance
     else:
@@ -76,7 +76,9 @@ def pay(amount):
     valid = authenticate_card()
     if valid:
         print('valid')
-        balance = 100
+        balance = 100.00
+        if balance < amount:
+            raise ValueError('Insufficient Balance')
         balance = balance - amount
         return balance
     else:
