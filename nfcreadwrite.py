@@ -1,40 +1,12 @@
-# Example of detecting and reading a block from a MiFare classic NFC card.
-# Author: Tony DiCola & Roberto Laricchia
-# MiFare Classic modification: Francesco Crisafulli
-#
-# Copyright (c) 2015 Adafruit Industries
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
-
-"""
-This example shows connecting to the PN532 and writing & reading a mifare classic
-type RFID tag
-"""
-
+#!/usr/bin/python3
+ 
 import board
 import busio
+
 # Additional import needed for I2C/SPI
 from digitalio import DigitalInOut
-#
-# NOTE: pick the import that matches the interface being used
-#
 from adafruit_pn532.adafruit_pn532 import MIFARE_CMD_AUTH_B
+
 #from adafruit_pn532.i2c import PN532_I2C
 from adafruit_pn532.spi import PN532_SPI
 #from adafruit_pn532.uart import PN532_UART
@@ -92,6 +64,7 @@ if not authenticated:
 # Set 16 bytes of block to 0xFEEDBEEF
 data = bytearray(16)
 data[0:16] = b'\xFE\xED\xBE\xEF\x01\x02\x03\x04\x05\x06\x07\x08\x09\x10\x11\x12'
+data[15:16] = b'\xAA\xBB'
 
 # Write 16 byte block.
 pn532.mifare_classic_write_block(4, data)
