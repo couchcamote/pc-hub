@@ -55,7 +55,7 @@ def get_balance():
         return balance
     else:
         print('failed')
-        raise ValueError('Card Authentication Failed') 
+        raise ValueError('Card Authentication Failed')
 
 def reload(amount):
     valid = authenticate_card()
@@ -66,7 +66,7 @@ def reload(amount):
         return balance
     else:
         print('failed')
-        raise ValueError('Card Authentication Failed') 
+        raise ValueError('Card Authentication Failed')
 
 def pay(amount):
     valid = authenticate_card()
@@ -77,5 +77,5 @@ def pay(amount):
         return balance
     else:
         print('failed')
-        raise ValueError('Card Authentication Failed')     
+        raise ValueError('Card Authentication Failed')
 

@@ -1,0 +1,6 @@
+configparser
+flask
+flask_restful
+board
+gps
+pymysql
