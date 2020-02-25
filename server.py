@@ -2,6 +2,7 @@
 
 from flask import Flask
 from flask_restful import Api, Resource, reqparse
+from dataclasses import dataclass
 import nfc_service
 
 
@@ -48,8 +49,8 @@ class Balance(Resource):
             print(err.args)
             return exc,400
 
-api.add_resource(Reload, "/reload/<string:amount>")
-api.add_resource(Pay, "/pay/<string:amount>")
+api.add_resource(Reload, "/reload/<float:amount>")
+api.add_resource(Pay, "/pay/<float:amount>")
 api.add_resource(Balance, "/balance")
 
-app.run(host = "localhost", port = 9566, debug=True)
+app.run(host = "192.168.0.195", port = 9566, debug=True)
