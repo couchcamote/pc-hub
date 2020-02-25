@@ -2,7 +2,7 @@
 
 import board
 import busio
-
+import time
 # Additional import needed for I2C/SPI
 from digitalio import DigitalInOut
 from adafruit_pn532.adafruit_pn532 import MIFARE_CMD_AUTH_B
@@ -14,7 +14,10 @@ spi = busio.SPI(board.SCK, board.MOSI, board.MISO)
 cs_pin = DigitalInOut(board.D5)
 pn532 = PN532_SPI(spi, cs_pin, debug=False)
 
-key = b'\xFF\xFF\xFF\xFF\xFF\xFF'
+CARD_KEY = b'\xFF\xFF\xFF\xFF\xFF\xFF'
+
+#10 seconds
+timeout = 10
 
 
 def init_service():
@@ -27,10 +30,14 @@ def init_service():
 def authenticate_card():
     print('Waiting for RFID/NFC card!')
 
+    timeout_start = time.time()
+
     while True:
         # Check if a card is available to read
+        if time.time() > timeout_start + timeout:
+            raise ValueError('Timeout')
+
         uid = pn532.read_passive_target(timeout=0.5)
-        #print('.', end="")
         # Try again if no card is available.
         if uid is not None:
             break
@@ -39,7 +46,7 @@ def authenticate_card():
     print("Authenticating block 4 ...")
 
     authenticated = pn532.mifare_classic_authenticate_block(
-        uid, 4, MIFARE_CMD_AUTH_B, key)
+        uid, 4, MIFARE_CMD_AUTH_B, CARD_KEY)
 
     if authenticated:
         print('Authentication Success!')
@@ -92,7 +99,7 @@ if __name__ == '__main__':
         init_service()
         valid = authenticate_card()
         print(valid)
-        
+
     # Reset by pressing CTRL + C
     except KeyboardInterrupt:
         print('Stopped')
