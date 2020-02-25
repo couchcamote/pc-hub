@@ -10,3 +10,4 @@ pn532.SAMconfigure()
 card_data = pn532.read_mifare().get_data()
 
 print(card_data)
+print(str(card_data))
