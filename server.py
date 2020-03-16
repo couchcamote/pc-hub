@@ -18,6 +18,17 @@ class ReturnValue:
     lon: int
     time : str
 
+class SetupCard(Resource):
+    def get(self):
+        try:
+            balance = nfc_service.setup_card()
+            return balance, 200
+
+        except ValueError as err:
+            exc = "Exception: {0}".format(str(err))
+            print(err.args)
+            return exc,400    
+
 class Reload(Resource):
     def get(self, amount):
         try:
@@ -54,5 +65,6 @@ class Balance(Resource):
 api.add_resource(Reload, "/reload/<float:amount>")
 api.add_resource(Pay, "/pay/<float:amount>")
 api.add_resource(Balance, "/balance")
+api.add_resource(SetupCard, "/setup")
 
 app.run(host = "192.168.0.195", port = 9566, debug=True)

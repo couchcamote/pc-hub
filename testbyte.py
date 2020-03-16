@@ -1,0 +1,4 @@
+data = bytearray(16)
+data[0:16] = b'\xFE\xED\xBE\xEF\x01\x02\x03\x04\x05\x06\x07\x08\x09\x10\x11\x12'
+
+[hex(x) for x in pn532.mifare_classic_read_block(4)])
