@@ -16,12 +16,11 @@ def pring_gps_data():
 
 	if not packet:
 		print('Try to connect')
-		gpsd.connect()
-
-                packet = gpsd.get_current()
-                lon = gpspacket.lon
-                lat = gpspacket.lat
-                time = gpspacket.time
+		init_services()
+        packet = gpsd.get_current()
+		lon = gpspacket.lon
+		lat = gpspacket.lat
+		time = gpspacket.time
 		print('Time : '+str(time)+  ' Longitude: '+ str(lon)+', Latitude: '+str(lat))
 
 	packet = gpsd.get_current()
@@ -29,8 +28,6 @@ def pring_gps_data():
 	lat = gpspacket.lat
 	time = gpspacket.time
 	print('Time : '+str(time)+  ' Longitude: '+ str(lon)+', Latitude: '+str(lat))
-
-
 
 if __name__ == "__main__":
 
