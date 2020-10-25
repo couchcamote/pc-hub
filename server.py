@@ -13,16 +13,15 @@ api = Api(app)
 
 @dataclass
 class ReturnValue:
-    balance: float
-    lat: float
-    lon: int
+    balance: str
+    lat: str
+    lon: str
     time : str
 
 class SetupCard(Resource):
     def get(self):
         try:
             balance = nfc_service.setup_card()
-            gps_service.print_gps_data()
             return balance, 200
 
         except ValueError as err:
@@ -63,9 +62,25 @@ class Balance(Resource):
             print(err.args)
             return exc,400
 
+class Location(Resource):
+    def get(self):
+        try:
+            packet = gps_service.get_gps_data()
+            lon = gpspacket.lon
+            lat = gpspacket.lat
+            time = gpspacket.time   
+            returnvalue =  ReturnValue(str(0.0), str(lat), str(lon), str(time))        
+            return returnvalue, 200
+
+        except ValueError as err:
+            exc = "Exception: {0}".format(str(err))
+            print(err.args)
+            return exc,400            
+
 api.add_resource(Reload, "/reload/<float:amount>")
 api.add_resource(Pay, "/pay/<float:amount>")
 api.add_resource(Balance, "/balance")
 api.add_resource(SetupCard, "/setup")
+api.add_resource(Location, "/location")
 
 app.run(host = "192.168.0.196", port = 9566, debug=True)
