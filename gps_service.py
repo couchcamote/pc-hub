@@ -19,15 +19,15 @@ def print_gps_data():
 		print('Try to connect')
 		init_service()
 		packet = gpsd.get_current()
-		lon = gpspacket.lon
-		lat = gpspacket.lat
-		time = gpspacket.time
+		lon = packet.lon
+		lat = packet.lat
+		time = packet.time
 		print('Time : '+str(time)+  ' Longitude: '+ str(lon)+', Latitude: '+str(lat))
 
 	packet = gpsd.get_current()
-	lon = gpspacket.lon
-	lat = gpspacket.lat
-	time = gpspacket.time
+	lon = packet.lon
+	lat = packet.lat
+	time = packet.time
 	print('Time : '+str(time)+  ' Longitude: '+ str(lon)+', Latitude: '+str(lat))
 
 if __name__ == "__main__":
