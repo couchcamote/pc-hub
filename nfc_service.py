@@ -24,8 +24,8 @@ timeout = 10
 
 
 def init_service():
-    ic, ver, rev, support = pn532.get_firmware_version()
-    print('Found PN532 with firmware version: {0}.{1}'.format(ver, rev))
+    #ic, ver, rev, support = pn532.get_firmware_version()
+    #print('Found PN532 with firmware version: {0}.{1}'.format(ver, rev))
     # Configure PN532 to communicate with MiFare cards
     pn532.SAM_configuration()
 
