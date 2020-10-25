@@ -6,6 +6,7 @@ from flask_cors import CORS
 from dataclasses import dataclass
 import nfc_service
 import gps_service
+import config_service
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
@@ -94,4 +95,6 @@ if __name__ == '__main__':
     # Get Initial GPS Data
     gps_service.print_gps_data()
 
-    app.run(host = "192.168.0.196", port = 9566, debug=True)
+    host = config_service.get_value('app','host')
+    port = config_service.get_value('app','port') || 9566
+    app.run(host, int(port), debug=True)
