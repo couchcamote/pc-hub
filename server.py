@@ -21,9 +21,9 @@ class ReturnValue:
 class SetupCard(Resource):
     def get(self):
         try:
-		balance = nfc_service.setup_card()
-		gps_service.print_gps_data()
-		return balance, 200
+            balance = nfc_service.setup_card()
+            gps_service.print_gps_data()
+            return balance, 200
 
         except ValueError as err:
             exc = "Exception: {0}".format(str(err))
