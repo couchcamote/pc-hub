@@ -11,7 +11,7 @@ def get_gps_data():
 	packet = gpsd.get_current()
 	return packet
 
-def pring_gps_data():
+def print_gps_data():
 	packet = gpsd.get_current()
 
 	if not packet:
