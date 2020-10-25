@@ -17,7 +17,7 @@ def print_gps_data():
 	if not packet:
 		print('Try to connect')
 		init_services()
-        packet = gpsd.get_current()
+		packet = gpsd.get_current()
 		lon = gpspacket.lon
 		lat = gpspacket.lat
 		time = gpspacket.time
