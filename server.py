@@ -68,8 +68,8 @@ class Location(Resource):
             packet = gps_service.get_gps_data()
             lon = gpspacket.lon
             lat = gpspacket.lat
-            time = gpspacket.time   
-            returnvalue =  ReturnValue(str(0.0), str(lat), str(lon), str(time))        
+            time = gpspacket.time
+            returnvalue =  ReturnValue(str(0.0), str(lat), str(lon), str(time))  
             return returnvalue, 200
 
         except ValueError as err:
