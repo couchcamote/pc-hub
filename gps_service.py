@@ -3,7 +3,7 @@
 import gpsd
 
 
-def init_services():
+def init_service():
 	print('Initializing Services ... ')
 	gpsd.connect()
 
@@ -17,7 +17,7 @@ def print_gps_data():
 
 	if not packet:
 		print('Try to connect')
-		init_services()
+		init_service()
 		packet = gpsd.get_current()
 		lon = gpspacket.lon
 		lat = gpspacket.lat
@@ -34,7 +34,7 @@ if __name__ == "__main__":
 
 	print('Initializing GPS Service ... ')
 
-	init_services()
+	init_service()
 
 	gpspacket = get_gps_data()
 

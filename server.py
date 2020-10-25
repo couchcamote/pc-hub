@@ -78,10 +78,17 @@ class Location(Resource):
             print(err.args)
             return exc,400            
 
-api.add_resource(Reload, "/reload/<float:amount>")
-api.add_resource(Pay, "/pay/<float:amount>")
-api.add_resource(Balance, "/balance")
-api.add_resource(SetupCard, "/setup")
-api.add_resource(Location, "/location")
+if __name__ == '__main__':
 
-app.run(host = "192.168.0.196", port = 9566, debug=True)
+    #Define Resource
+    api.add_resource(Reload, "/reload/<float:amount>")
+    api.add_resource(Pay, "/pay/<float:amount>")
+    api.add_resource(Balance, "/balance")
+    api.add_resource(SetupCard, "/setup")
+    api.add_resource(Location, "/location")
+
+    #Init Services
+    nfc_service.init_service()
+    gps_service.init_service()
+
+    app.run(host = "192.168.0.196", port = 9566, debug=True)
