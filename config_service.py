@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 
-import ConfigParser
+import configparser
 
-parser = ConfigParser()
+parser = configparser.ConfigParser()
 parser.read('config.ini')
 
 if __name__ == "__main__":
