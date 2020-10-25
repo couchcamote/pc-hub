@@ -5,7 +5,7 @@ from flask_restful import Api, Resource, reqparse
 from flask_cors import CORS
 from dataclasses import dataclass
 import nfc_service
-
+import gps_service
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
@@ -21,13 +21,14 @@ class ReturnValue:
 class SetupCard(Resource):
     def get(self):
         try:
-            balance = nfc_service.setup_card()
-            return balance, 200
+		balance = nfc_service.setup_card()
+		gps_service.print_gps_data()
+		return balance, 200
 
         except ValueError as err:
             exc = "Exception: {0}".format(str(err))
             print(err.args)
-            return exc,400    
+            return exc,400 
 
 class Reload(Resource):
     def get(self, amount):
