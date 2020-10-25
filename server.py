@@ -67,4 +67,4 @@ api.add_resource(Pay, "/pay/<float:amount>")
 api.add_resource(Balance, "/balance")
 api.add_resource(SetupCard, "/setup")
 
-app.run(host = "192.168.0.195", port = 9566, debug=True)
+app.run(host = "192.168.0.196", port = 9566, debug=True)

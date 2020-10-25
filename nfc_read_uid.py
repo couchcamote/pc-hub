@@ -35,8 +35,8 @@ pn532 = PN532_SPI(spi, cs_pin, debug=False)
 
 print('READ NFC UID')
 
-ic, ver, rev, support = pn532.get_firmware_version()
-print('Found PN532 with firmware version: {0}.{1}'.format(ver, rev))
+#ic, ver, rev, support = pn532.get_firmware_version()
+#print('Found PN532 with firmware version: {0}.{1}'.format(ver, rev))
 
 # Configure PN532 to communicate with MiFare cards
 pn532.SAM_configuration()
