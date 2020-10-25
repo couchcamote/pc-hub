@@ -67,9 +67,9 @@ class Location(Resource):
     def get(self):
         try:
             packet = gps_service.get_gps_data()
-            lon = gpspacket.lon
-            lat = gpspacket.lat
-            time = gpspacket.time
+            lon = packet.lon
+            lat = packet.lat
+            time = packet.time
             returnvalue =  ReturnValue(str(0.0), str(lat), str(lon), str(time))  
             return returnvalue, 200
 
