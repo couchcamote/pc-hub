@@ -89,6 +89,9 @@ if __name__ == '__main__':
 
     #Init Services
     nfc_service.init_service()
+
     gps_service.init_service()
+    # Get Initial GPS Data
+    gps_service.print_gps_data()
 
     app.run(host = "192.168.0.196", port = 9566, debug=True)
