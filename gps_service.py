@@ -12,6 +12,7 @@ def get_gps_data():
 	return packet
 
 def print_gps_data():
+	print('Print GPS Data... ')
 	packet = gpsd.get_current()
 
 	if not packet:

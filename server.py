@@ -55,6 +55,7 @@ class Balance(Resource):
     def get(self):
         try:
             balance = nfc_service.get_balance()
+            gps_service.print_gps_data()
             return balance, 200
 
         except ValueError as err:
