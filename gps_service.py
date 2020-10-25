@@ -8,22 +8,12 @@ def init_service():
 	gpsd.connect()
 
 def get_gps_data():
+	print('Get GPS Data... ')
 	packet = gpsd.get_current()
 	return packet
 
 def print_gps_data():
 	print('Print GPS Data... ')
-	packet = gpsd.get_current()
-
-	if not packet:
-		print('Try to connect')
-		init_service()
-		packet = gpsd.get_current()
-		lon = packet.lon
-		lat = packet.lat
-		time = packet.time
-		print('Time : '+str(time)+  ' Longitude: '+ str(lon)+', Latitude: '+str(lat))
-
 	packet = gpsd.get_current()
 	lon = packet.lon
 	lat = packet.lat
