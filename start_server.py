@@ -28,7 +28,16 @@ class SetupCard(Resource):
     def get(self):
         try:
             balance,uid = nfc_service.setup_card()
-	    #sqlitedb_service.
+
+            packet = gps_service.get_gps_data()
+            lon = packet.lon
+            lat = packet.lat
+            time = packet.time
+
+            gps_service.print_gps_data()
+
+            save_transaction("TX_PAY", uid, lat, lon, balance)
+
             return balance, 200
 
         except ValueError as err:
@@ -40,6 +49,16 @@ class Reload(Resource):
     def get(self, amount):
         try:
             balance,uid = nfc_service.reload(amount)
+
+            packet = gps_service.get_gps_data()
+            lon = packet.lon
+            lat = packet.lat
+            time = packet.time
+
+            gps_service.print_gps_data()
+
+            save_transaction("TX_RELOAD", uid, lat, lon, balance)
+
             return balance, 200
 
         except ValueError as err:
@@ -51,6 +70,16 @@ class Pay(Resource):
     def get(self, amount):
         try:
             balance,uid = nfc_service.pay(amount)
+
+            packet = gps_service.get_gps_data()
+            lon = packet.lon
+            lat = packet.lat
+            time = packet.time
+
+            gps_service.print_gps_data()
+
+            save_transaction("TX_PAY", uid, lat, lon, balance)
+
             return balance, 200
 
         except ValueError as err:
@@ -63,14 +92,23 @@ class Balance(Resource):
         try:
             balance,uid = nfc_service.get_balance()
             print("Card uid:", uid)
+
+            packet = gps_service.get_gps_data()
+            lon = packet.lon
+            lat = packet.lat
+            time = packet.time
+
             gps_service.print_gps_data()
+
+            save_transaction("TX_BALANCE", uid, lat, lon, balance)
+
             return balance, 200
 
         except ValueError as err:
             exc = "Exception: {0}".format(str(err))
             print(err.args)
             return exc,400
-B
+
 class Location(Resource):
     def get(self):
         try:
@@ -88,6 +126,26 @@ class Location(Resource):
             print(err.args)
             return exc,400
 
+class LatestTransactions(Resource):
+    def get(self):
+        try:
+            records = sqlitedb_service.get_recent_transactions()
+            return records, 200
+        except ValueError as err:
+            exc = "Exception: {0}".format(str(err))
+            print(err.args)
+            return exc,400
+
+
+def save_transaction(action_type, card_id, latitude, longitude, latest_balance):
+    #get from device and login
+    terminal = "TRM1"
+    location_id = "ROUTE_LOC_01"
+    driver_id = "DRV001"
+    driver_name = "Sweetney Luber"
+
+    sqlitedb_service.insert_record(terminal,action_type,uid,latitude,longitude,location_id,latest_balance,driver_id,driver_name)
+
 if __name__ == '__main__':
 
     #Define Resource
@@ -96,6 +154,7 @@ if __name__ == '__main__':
     api.add_resource(Balance, "/balance")
     api.add_resource(SetupCard, "/setup")
     api.add_resource(Location, "/location")
+    api.add_resource(LatestTransactions, "/transactions")
 
     #Init Services
     nfc_service.init_service()

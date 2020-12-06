@@ -1,10 +1,18 @@
 import sqlite3
 from sqlite3 import Error
 import datetime
+import config_service
 
 conn = None
 
-def create_connection(db_file):
+
+def get_connection():   
+
+    if conn is not None:
+        return conn
+
+    db_file = config_service.get_value('sqlite','database')
+
     try:
         conn = sqlite3.connect(db_file)
         return conn
@@ -13,9 +21,8 @@ def create_connection(db_file):
 
     return conn
 
+
 def init_service():
-    
-    database = r"db/hub.db"
     
     sql_create_transpo_record = """ CREATE TABLE IF NOT EXISTS transport_record (
                                     id integer PRIMARY KEY,
@@ -32,18 +39,20 @@ def init_service():
                                     synched boolean default false
                                 ); """;
 
-    
-    conn = create_connection(database)
+    conn = get_connection()
     
     if conn is not None:
-        create_table(conn, sql_create_transpo_record)
+        create_table(sql_create_transpo_record)
         return conn
     else:
         print("Error! cannot create the database connection.")
-  
     return None
 
-def create_table(conn, create_table_sql):
+
+def create_table(create_table_sql):
+
+    if conn is None:
+        conn = get_connection()
 
     try:
         c = conn.cursor()
@@ -51,9 +60,14 @@ def create_table(conn, create_table_sql):
     except Error as e:
         print(e)
 
+    conn.close()
+
 
 def insert_record(terminal_key, action_type, card_id, latitude, longitude, location_id, latest_balance, driver_id, driver_name):
     
+    if conn is None:
+        conn = get_connection()
+
     insertSQLTemplate = """INSERT INTO transport_record (terminal_key,action_type,card_id,latitude,longitude,location_id,timestamp,latest_balance,driver_id,driver_name)
                 VALUES('{terminal_key_param}','{action_type_param}','{card_id_param}',{latitude_param},{longitude_param},'{location_id_param}',
                 datetime('now', 'localtime'),{latest_balance_param},'{driver_id_param}','{driver_name_param}' ); """;
@@ -79,7 +93,10 @@ def insert_record(terminal_key, action_type, card_id, latitude, longitude, locat
     except Error as e:
         print(e)
 
-def get_recent_transactions(conn, limit = 10):
+
+def get_recent_transactions(limit = 10):
+
+    conn = get_connection()
     
     query = """SELECT * FROM transport_record order by timestamp desc limit {limit_param} ; """.format(limit_param = limit);
         
@@ -102,20 +119,20 @@ def get_recent_transactions(conn, limit = 10):
 def test():
 
     # create a database connection
-    conn = init_service()
-    
+    init_service()
 
+    conn = get_connection()
+    
     if conn is not None:
 
            # test insert 
-        insert_record(conn,'TRM1','BAL_INQUIRY','AB-CD-EF-01',14.628417,121.044691, 'DROPOFF001',1000.0, 'DRV001','Juan Dela Cruz')
+        insert_record('TRM1','BAL_INQUIRY','AB-CD-EF-01',14.628417,121.044691, 'DROPOFF001',1000.0, 'DRV001','Juan Dela Cruz')
         
-        rows = get_recent_transactions(conn)
+        rows = get_recent_transactions()
         
         for row in rows:
             print(row)
         
-
     else:
         print("Error! cannot create the database connection.")
         
