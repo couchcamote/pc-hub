@@ -2,9 +2,9 @@ import sqlite3
 from sqlite3 import Error
 import datetime
 
+conn = None
 
 def create_connection(db_file):
-    conn = None
     try:
         conn = sqlite3.connect(db_file)
         return conn
@@ -52,7 +52,7 @@ def create_table(conn, create_table_sql):
         print(e)
 
 
-def insert_record(conn, terminal_key, action_type, card_id, latitude, longitude, location_id, latest_balance, driver_id, driver_name):
+def insert_record(terminal_key, action_type, card_id, latitude, longitude, location_id, latest_balance, driver_id, driver_name):
     
     insertSQLTemplate = """INSERT INTO transport_record (terminal_key,action_type,card_id,latitude,longitude,location_id,timestamp,latest_balance,driver_id,driver_name)
                 VALUES('{terminal_key_param}','{action_type_param}','{card_id_param}',{latitude_param},{longitude_param},'{location_id_param}',
