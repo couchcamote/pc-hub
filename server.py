@@ -1,10 +1,11 @@
-#!/usr/bin/python3
+#!/usr/bin/python3AA
 
 from flask import Flask
 from flask_restful import Api, Resource, reqparse
 from flask_cors import CORS
 from dataclasses import dataclass
 from dataclasses_json import dataclass_json
+import json
 import nfc_service
 import gps_service
 import config_service
@@ -27,6 +28,7 @@ class SetupCard(Resource):
     def get(self):
         try:
             balance,uid = nfc_service.setup_card()
+	    #sqlitedb_service.
             return balance, 200
 
         except ValueError as err:
@@ -60,8 +62,7 @@ class Balance(Resource):
     def get(self):
         try:
             balance,uid = nfc_service.get_balance()
-            print("Card Service Response")
-            print(uid)
+            print("Card uid:", uid)
             gps_service.print_gps_data()
             return balance, 200
 
@@ -69,7 +70,7 @@ class Balance(Resource):
             exc = "Exception: {0}".format(str(err))
             print(err.args)
             return exc,400
-
+B
 class Location(Resource):
     def get(self):
         try:
@@ -80,7 +81,7 @@ class Location(Resource):
             returnvalue =  ReturnValue(0.0, lat, lon, time,'')
             print(returnvalue)
             print(returnvalue.to_json())
-            return returnvalue.to_json(), 200
+            return json.loads(returnvalue.to_json()), 200
 
         except ValueError as err:
             exc = "Exception: {0}".format(str(err))
