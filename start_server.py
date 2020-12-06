@@ -1,4 +1,4 @@
-#!/usr/bin/python3AA
+#!/usr/bin/python3
 
 from flask import Flask
 from flask_restful import Api, Resource, reqparse
@@ -144,7 +144,7 @@ def save_transaction(action_type, card_id, latitude, longitude, latest_balance):
     driver_id = "DRV001"
     driver_name = "Sweetney Luber"
 
-    sqlitedb_service.insert_record(terminal,action_type,uid,latitude,longitude,location_id,latest_balance,driver_id,driver_name)
+    sqlitedb_service.insert_record(terminal,action_type,card_id,latitude,longitude,location_id,latest_balance,driver_id,driver_name)
 
 if __name__ == '__main__':
 
