@@ -5,7 +5,7 @@ import configparser
 parser = configparser.ConfigParser()
 parser.read('config.ini')
 
-def get_value(section, config)
+def get_value(section, config):
     return parser.get(section, config)
 
 if __name__ == "__main__":

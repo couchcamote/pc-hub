@@ -22,7 +22,6 @@ AMOUNT_BLOCK = 4
 #10 seconds
 timeout = 10
 
-
 def init_service():
     #ic, ver, rev, support = pn532.get_firmware_version()
     #print('Found PN532 with firmware version: {0}.{1}'.format(ver, rev))
@@ -51,12 +50,15 @@ def authenticate_card():
     authenticated = pn532.mifare_classic_authenticate_block(
         uid, AMOUNT_BLOCK, MIFARE_CMD_AUTH_B, CARD_KEY)
 
+    uid_str =  bytes(uid).hex()
+    print('uid hex:',uid_str)
+
     if authenticated:
         print('Authentication Success!')
-        return True
+        return True,uid_str
 
     print("Authentication failed!")
-    return False
+    return False,"UNKNOWN"
 
 def get_balance_from_card():
     print('Waiting for RFID/NFC card!')
@@ -93,7 +95,11 @@ def get_balance_from_card():
     b = struct.unpack('f', balance_byte_array)
     balance = b[0]
     print('Balance is:', balance)
-    return balance
+
+    uid_str =  bytes(uid).hex()
+    print('uid hex:',uid_str)
+
+    return balance,uid_str
 
 def write_balance_to_card(balance):
     print('Waiting for RFID/NFC card!')
@@ -142,14 +148,18 @@ def write_balance_to_card(balance):
     b = struct.unpack('f', balance_byte_array)
     balance = b[0]
     print('New Balance is:', balance)
-    return balance    
+
+    uid_str =  bytes(uid).hex()
+    print('uid hex:',uid_str)
+
+    return balance, uid_str
 
 def get_balance():
-    valid = authenticate_card()
+    valid,uid = authenticate_card()
     if valid:
         print('valid')
-        balance = get_balance_from_card()
-        return balance
+        balance,uid = get_balance_from_card()
+        return balance,uid
     else:
         print('failed')
         raise ValueError('Card Authentication Failed')
@@ -197,31 +207,35 @@ def setup_card():
     b = struct.unpack('f', balance_byte_array)
     balance = b[0]
     print('Card Setup Done. New Balance is:', balance)
-    return balance        
+
+    uid_str =  bytes(uid).hex()
+    print('uid hex:',uid_str)
+
+    return balance,uid_str
 
 def reload(amount):
-    valid = authenticate_card()
+    valid,uid = authenticate_card()
     if valid:
         print('valid')
-        balance =  get_balance_from_card()
+        balance,uid =  get_balance_from_card()
         balance = balance + amount
-        balance = write_balance_to_card(balance)
-        return balance
+        balance, uid = write_balance_to_card(balance)
+        return balance,uid
     else:
         print('failed')
         raise ValueError('Card Authentication Failed')
 
 
 def pay(amount):
-    valid = authenticate_card()
+    valid,uid = authenticate_card()
     if valid:
         print('valid')
-        balance = get_balance_from_card()
+        balance,uid = get_balance_from_card()
         if balance < amount:
             raise ValueError('Insufficient Balance')
         balance = balance - amount
-        balance = write_balance_to_card(balance)
-        return balance
+        balance,uid = write_balance_to_card(balance)
+        return balance,uid
     else:
         print('failed')
         raise ValueError('Card Authentication Failed')
@@ -231,8 +245,8 @@ if __name__ == '__main__':
     print("Main Start - Test")
     try:
         init_service()
-        valid = authenticate_card()
-        print(valid)
+        valid,uid = authenticate_card()
+        print("Valid?:",valid,"Card ID:",uid)
 
     # Reset by pressing CTRL + C
     except KeyboardInterrupt:

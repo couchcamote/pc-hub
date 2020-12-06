@@ -4,25 +4,29 @@ from flask import Flask
 from flask_restful import Api, Resource, reqparse
 from flask_cors import CORS
 from dataclasses import dataclass
+from dataclasses_json import dataclass_json
 import nfc_service
 import gps_service
 import config_service
+import sqlitedb_service
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 api = Api(app)
 
+@dataclass_json
 @dataclass
 class ReturnValue:
     balance: str
     lat: str
     lon: str
     time : str
+    uid : str
 
 class SetupCard(Resource):
     def get(self):
         try:
-            balance = nfc_service.setup_card()
+            balance,uid = nfc_service.setup_card()
             return balance, 200
 
         except ValueError as err:
@@ -33,7 +37,7 @@ class SetupCard(Resource):
 class Reload(Resource):
     def get(self, amount):
         try:
-            balance = nfc_service.reload(amount)
+            balance,uid = nfc_service.reload(amount)
             return balance, 200
 
         except ValueError as err:
@@ -44,7 +48,7 @@ class Reload(Resource):
 class Pay(Resource):
     def get(self, amount):
         try:
-            balance = nfc_service.pay(amount)
+            balance,uid = nfc_service.pay(amount)
             return balance, 200
 
         except ValueError as err:
@@ -55,7 +59,9 @@ class Pay(Resource):
 class Balance(Resource):
     def get(self):
         try:
-            balance = nfc_service.get_balance()
+            balance,uid = nfc_service.get_balance()
+            print("Card Service Response")
+            print(uid)
             gps_service.print_gps_data()
             return balance, 200
 
@@ -71,13 +77,15 @@ class Location(Resource):
             lon = packet.lon
             lat = packet.lat
             time = packet.time
-            returnvalue =  ReturnValue(str(0.0), str(lat), str(lon), str(time))  
-            return returnvalue, 200
+            returnvalue =  ReturnValue(0.0, lat, lon, time,'')
+            print(returnvalue)
+            print(returnvalue.to_json())
+            return returnvalue.to_json(), 200
 
         except ValueError as err:
             exc = "Exception: {0}".format(str(err))
             print(err.args)
-            return exc,400            
+            return exc,400
 
 if __name__ == '__main__':
 
@@ -95,6 +103,9 @@ if __name__ == '__main__':
     # Get Initial GPS Data
     gps_service.print_gps_data()
 
-    host = config_service.get_value('app','host')
-    port = config_service.get_value('app','port') || 9566
-    app.run(host, int(port), debug=True)
+    # Get SQLite DB Service
+    sqlitedb_service.init_service()
+
+    host_confg = config_service.get_value('app','host')
+    port = config_service.get_value('app','port') 
+    app.run(host = '192.168.0.195', port = 9566, debug=True)
