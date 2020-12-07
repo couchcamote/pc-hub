@@ -76,7 +76,7 @@ class Pay(Resource):
             lat = packet.lat
             time = packet.time
 
-            gps_service.print_gps_data()
+            #gps_service.print_gps_data()
 
             save_transaction("TX_PAY", uid, lat, lon, balance)
 
@@ -117,8 +117,8 @@ class Location(Resource):
             lat = packet.lat
             time = packet.time
             returnvalue =  ReturnValue(0.0, lat, lon, time,'')
-            print(returnvalue)
-            print(returnvalue.to_json())
+            #print(returnvalue)
+            #print(returnvalue.to_json())
             return json.loads(returnvalue.to_json()), 200
 
         except ValueError as err:

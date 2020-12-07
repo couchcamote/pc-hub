@@ -72,7 +72,7 @@ def insert_record(terminal_key, action_type, card_id, latitude, longitude, locat
         driver_name_param = driver_name
         )
 
-    print(insertSQL)
+    #print(insertSQL)
 
     try:
         c = conn.cursor()

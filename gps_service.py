@@ -18,7 +18,7 @@ def print_gps_data():
 	lon = packet.lon
 	lat = packet.lat
 	time = packet.time
-	print('Time : '+str(time)+  ' Longitude: '+ str(lon)+', Latitude: '+str(lat))
+	#print('Time : '+str(time)+  ' Longitude: '+ str(lon)+', Latitude: '+str(lat))
 
 if __name__ == "__main__":
 
@@ -34,7 +34,7 @@ if __name__ == "__main__":
 
 	print ('Print ....')
 
-	print('Longitude: '+ str(lon)+', Latitude: '+str(lat))
-	print('UTC Time: '+ str(time))
+	#print('Longitude: '+ str(lon)+', Latitude: '+str(lat))
+	#print('UTC Time: '+ str(time))
 
 
