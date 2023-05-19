@@ -6,7 +6,7 @@ pymysql.install_as_MySQLdb()
 
 import MySQLdb
 
-conn = MySQLdb.connect(host='194.59.164.85', user='u430582279_adm', passwd='pchubadm2020', db='u430582279_pchub')
+conn = MySQLdb.connect(host='localhost', user='dbuser', passwd='dbpassword', db='db')
 cursor = conn.cursor()
 
 sqlquery = 'select * from transpo_rec'
