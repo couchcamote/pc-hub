@@ -8,7 +8,7 @@ import MySQLdb
 
 def open_connection():
 	print('Opening connection ... ')
-	conn = MySQLdb.connect(host='194.59.164.85', user='u430582279_adm', passwd='mypchub_2020p@$$w0rd', db='u430582279_pchub')
+	conn = MySQLdb.connect(host='localhost', user='dbsuer', passwd='dbpassword', db='db')
     return conn
 
 def close_connection(conn):
